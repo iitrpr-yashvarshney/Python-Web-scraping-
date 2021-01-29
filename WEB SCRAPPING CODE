@@ -1,0 +1,32 @@
+import requests
+from bs4 import BeautifulSoup as bs
+import os
+import re
+path="C:\\WebScrapingInPython\\TRIAL FOLDER USING PYTHON\\yash.txt"
+os.chdir(path)
+url='https://timesofindia.indiatimes.com/india/over-10-crore-small-farmers-started-getting-benefits-of-farm-laws-president-kovind/articleshow/80564980.cms'
+r=requests.get(url)
+soup=bs(r.content,'html.parser')
+para=soup.find('div',class_='_2pRMC _1t3fZ')
+anchor=para.find('a',href=True)
+url=anchor.get('href')
+r=requests.get(url)
+soup=bs(r.content,'html.parser')
+data=soup.find('div',class_='Normal')
+temp=data.get_text()
+print(temp)
+date_time=soup.find('span',class_='time_cptn')
+titlediv=soup.find('div',class_='main-content')
+with open('yash.txt', "w", encoding="utf-8") as file:
+    file.write('TITLE OF ARTICLE:\n')
+    file.write(titlediv.find('arttitle').get_text())
+    file.write("\nTEXT:\n")
+    file.write(temp)
+    file.write("\nSOURCE|DATE AND TIME:\n")
+    file.write(date_time.get_text())
+    file.flush()
+    file.close
+
+
+
+        
